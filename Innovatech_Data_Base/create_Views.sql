@@ -63,5 +63,3 @@ ORDER BY
     Month;
 
 SELECT * FROM monthly_sales_view;
-
-

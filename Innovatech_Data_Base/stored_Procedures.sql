@@ -72,5 +72,55 @@ DELIMITER ;
 
 CALL AddNewClient('Juan', 'Perez', '1990-01-01', 1135679389, 'juanperez@gmail.com', 'male', 'Viamonte 1234');
 
+-- Stored Procedure para aplicar una promocion
 
+DELIMITER //
 
+CREATE PROCEDURE applyPromotion(IN p_ProductID INT, IN p_PromotionID INT)
+BEGIN
+    SET @current_date = CURDATE();
+    
+    SET @promo_start_date = (
+        SELECT Start_date
+        FROM promotions
+        WHERE Promotion_id = p_PromotionID
+    );
+    
+    SET @promo_end_date = (
+        SELECT End_date
+        FROM promotions
+        WHERE Promotion_id = p_PromotionID
+    );
+    
+    SET @promo_discount = (
+        SELECT Discount
+        FROM promotions
+        WHERE Promotion_id = p_PromotionID
+    );
+    
+    START TRANSACTION;
+    
+    IF @current_date BETWEEN @promo_start_date AND @promo_end_date THEN
+        SET @current_price = (
+            SELECT Price
+            FROM product
+            WHERE Product_id = p_ProductID
+        );
+        
+        SET @current_price = @current_price - (@current_price * @promo_discount);
+        
+        UPDATE product
+        SET Price = @current_price
+        WHERE Product_id = p_ProductID;
+        
+        COMMIT;
+        SELECT 'Precio actualizado con descuento de promoción. Transacción completada.' AS Message;
+    ELSE
+        ROLLBACK;
+        SELECT 'No hay promoción vigente para este producto. La transacción ha sido revertida.' AS Message;
+    END IF;
+END //
+
+DELIMITER ;
+
+CALL applyPromotion(1, 2);

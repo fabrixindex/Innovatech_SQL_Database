@@ -15,7 +15,7 @@ BEGIN
     RETURN totalSpent;
 END//
 
-SELECT CalculateTotalSpent(1) AS TotalSpent;
+-- LLAMADO DE LA FUNCION: SELECT CalculateTotalSpent(1) AS TotalSpent;
 
 -- Función para verificar el stock de un producto
 CREATE FUNCTION CheckStock(productId INT, quantityNeeded INT)
@@ -34,7 +34,7 @@ BEGIN
     RETURN message;
 END//
 
-SELECT CheckStock(1, 5) AS StockStatus;
+-- LLAMADO DE LA FUNCION: SELECT CheckStock(1, 5) AS StockStatus;
 
 -- Función para calcular el precio total de una compra
 CREATE FUNCTION CalculateTotalPrice(productId INT, quantity INT)
@@ -48,7 +48,7 @@ BEGIN
     RETURN totalPrice;
 END//
 
-SELECT CalculateTotalPrice(1, 3) AS TotalPrice;
+-- LLAMADO DE LA FUNCION: SELECT CalculateTotalPrice(1, 3) AS TotalPrice;
 
 -- Función para obtener el nombre completo de un empleado
 CREATE FUNCTION GetEmployeeFullName(employeeId INT)
@@ -61,31 +61,5 @@ BEGIN
     WHERE Employee_id = employeeId;
     RETURN fullName;
 END//
-
-SELECT GetEmployeeFullName(1) AS FullName;
-
--- Función para calcular la edad de un cliente
-
-/*CREATE FUNCTION CalculateAgeForClient(clientId INT)
-RETURNS INT
-DETERMINISTIC
-BEGIN
-    DECLARE age INT;
-    DECLARE birthdate DATE;
-    SELECT Birthdate INTO birthdate
-    FROM client
-    WHERE Client_id = clientId;
-
-    SET age = YEAR(CURDATE()) - YEAR(birthdate);
-    IF MONTH(CURDATE()) < MONTH(birthdate) OR (MONTH(CURDATE()) = MONTH(birthdate) AND DAY(CURDATE()) < DAY(birthdate)) THEN
-        SET age = age - 1;
-    END IF;
-
-    RETURN age;
-END//
-
-SELECT CalculateAgeForClient(5) AS Age; */
-
--- ARREGLAR
 
 DELIMITER ;

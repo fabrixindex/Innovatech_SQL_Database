@@ -1,7 +1,7 @@
 use Innovatech;
 
 -- Crear la tabla de clientes
-create table client(
+CREATE TABLE client(
     Client_id int NOT NULL AUTO_INCREMENT, -- Identificador único del cliente
     Name varchar(20) NOT NULL,
     Last_Name varchar(20) NOT NULL,
@@ -13,20 +13,52 @@ create table client(
     primary key(Client_id)
 );
 
-create table category(
+-- Crear la tabla de categorias
+CREATE TABLE category(
     Category_id int NOT NULL AUTO_INCREMENT, -- Identificador único de la categoría
     Description_Category varchar(20),
     primary key(Category_id)
 );
 
+-- Crear la tabla de metodos de pago
 CREATE TABLE payment_method (
     Payment_id INT NOT NULL AUTO_INCREMENT, -- Identificador único del metodo de pago
     Method varchar(30) NOT NULL,
     PRIMARY KEY (Payment_id)
 );
 
+-- Crear la tabla de sucursales
+CREATE TABLE branch(
+    Branch_id int NOT NULL AUTO_INCREMENT, -- Identificador único de la sucursal
+    Name_Branch varchar(40),
+    Address_Branch varchar(30) NOT NULL,
+    Number_Phone_Branch int,
+    Email_Branch varchar(50) NOT NULL,
+    primary key(Branch_id)
+);
+
+-- Crear la tabla de proveedores
+CREATE TABLE supplier (
+    Supplier_id INT NOT NULL AUTO_INCREMENT, -- Identificador único del proveedor
+    Name varchar(50) NOT NULL,
+    Address varchar(50),
+    Phone_Number varchar(20),
+    Email varchar(50) NOT NULL,
+    PRIMARY KEY (Supplier_id)
+);
+
+-- Crear la tabla de promociones
+CREATE TABLE promotions (
+    Promotion_id INT NOT NULL AUTO_INCREMENT, -- Identificador único de las promociones
+    Description VARCHAR(255),
+    Start_date DATE,
+    End_date DATE,
+    Discount DECIMAL(5,2),
+    PRIMARY KEY (Promotion_id)
+);
+
 -- Crear la tabla de productos
-create table product(
+CREATE TABLE product(
     Product_id int NOT NULL AUTO_INCREMENT, -- Identificador único del producto
     Name_Product varchar(30) NOT NULL,
     Description varchar(100) NOT NULL,
@@ -37,18 +69,11 @@ create table product(
     Promotion_id INT NOT NULL DEFAULT 1,
     primary key(Product_id),
     foreign key(Category_id) REFERENCES category (Category_id),
-    foreign key (Supplier_id) REFERENCES supplier (Supplier_id)
+    foreign key (Supplier_id) REFERENCES supplier (Supplier_id),
+    foreign key(Promotion_id) REFERENCES promotions(Promotion_id)
 );
 
-create table branch(
-    Branch_id int NOT NULL AUTO_INCREMENT, -- Identificador único de la sucursal
-    Name_Branch varchar(40),
-    Address_Branch varchar(30) NOT NULL,
-    Number_Phone_Branch int,
-    Email_Branch varchar(50) NOT NULL,
-    primary key(Branch_id)
-);
-
+-- Crear la tabla de empleados
 create table employee(
     Employee_id int NOT NULL AUTO_INCREMENT, -- Identificador único del empleado
     Name varchar(20) NOT NULL,
@@ -62,6 +87,7 @@ create table employee(
     foreign key (Branch_id) REFERENCES branch (Branch_id)
 );
 
+-- Crear la tabla de compras
 CREATE TABLE purchase (
     Purchase_id INT NOT NULL AUTO_INCREMENT, -- Identificador único de la compra
     Branch_id INT NOT NULL,
@@ -79,16 +105,7 @@ CREATE TABLE purchase (
     FOREIGN KEY(Payment_id) REFERENCES payment_method (Payment_id)
 );
 
-
-CREATE TABLE supplier (
-    Supplier_id INT NOT NULL AUTO_INCREMENT, -- Identificador único del proveedor
-    Name varchar(50) NOT NULL,
-    Address varchar(50),
-    Phone_Number varchar(20),
-    Email varchar(50) NOT NULL,
-    PRIMARY KEY (Supplier_id)
-);
-
+-- Crear la tabla de comentarios de productos
 CREATE TABLE product_review (
     Review_id INT NOT NULL AUTO_INCREMENT, -- Identificador único de comentarios del producto
     Product_id INT,
@@ -101,6 +118,7 @@ CREATE TABLE product_review (
     FOREIGN KEY (Client_id) REFERENCES client (Client_id)
 );
 
+-- Crear la tabla de devoluciones
 CREATE TABLE returns (
     Return_id INT NOT NULL AUTO_INCREMENT, -- Identificador único de las devoluciones
     Product_id INT,
@@ -112,17 +130,9 @@ CREATE TABLE returns (
     FOREIGN KEY (Client_id) REFERENCES client (Client_id)
 );
 
-CREATE TABLE promotions (
-    Promotion_id INT NOT NULL AUTO_INCREMENT, -- Identificador único de las promociones
-    Description VARCHAR(255),
-    Start_date DATE,
-    End_date DATE,
-    Discount DECIMAL(5,2),
-    PRIMARY KEY (Promotion_id)
-);
-
 /* TABLAS PARA TRIGGERS */
 
+-- Crear la tabla de registro
 CREATE TABLE recycle_table (
     Product_id INT NOT NULL,
     Name_Product VARCHAR(20),
@@ -133,6 +143,7 @@ CREATE TABLE recycle_table (
     Deleted_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Crear la tabla de auditoria
 CREATE TABLE purchase_audit (
     Audit_id INT NOT NULL AUTO_INCREMENT,
     Purchase_id INT,
